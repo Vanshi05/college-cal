@@ -33,10 +33,10 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 echo 'Deploying the new image to the Kubernetes cluster...'
-                sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config apply -f k8s/'
+                sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config --insecure-skip-tls-verify apply -f k8s/'
                 
                 echo 'Checking deployment status...'
-                sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config rollout status deployment/collegia-frontend-deployment'
+                sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config --insecure-skip-tls-verify rollout status deployment/collegia-frontend-deployment'
             }
         }
     }

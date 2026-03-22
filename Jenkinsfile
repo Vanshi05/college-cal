@@ -9,25 +9,23 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing Bun and project dependencies...'
-                // In a full production setup, Jenkins would run this inside a Bun container
-                sh 'bun install' 
-            }
-        }
-
         stage('SonarQube Code Analysis') {
             steps {
-                echo 'Running SonarQube scanner for code quality...'
-                // Triggers the SonarScanner we tested earlier
-                sh 'sonar-scanner'
+                echo 'Downloading SonarScanner...'
+                sh '''
+                    curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+                    unzip -q -o sonar-scanner.zip
+                    
+                    echo "Running Analysis..."
+                    ./sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.login=sqa_aaeec05ed363353e3528735441f1cf0f386a43de
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo 'Building the Docker image for collegia-cal...'
+                // Jenkins will now pass this command to your Windows Docker Engine!
                 sh 'docker build -t collegia-frontend:latest .'
             }
         }
@@ -35,8 +33,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 echo 'Deploying the new image to the Kubernetes cluster...'
-                // This is where the kubectl commands will go later
-                sh 'echo "Deployment successful!"'
+                sh 'echo "Simulating Kubernetes deployment for now..."'
             }
         }
     }

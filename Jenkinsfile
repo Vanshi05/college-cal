@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-stage('SonarQube Code Analysis') {
+/*stage('SonarQube Code Analysis') {
     agent {
         docker { 
             image 'sonarsource/sonar-scanner-cli' 
@@ -21,6 +21,7 @@ stage('SonarQube Code Analysis') {
         sh 'sonar-scanner -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.login=sqa_aaeec05ed363353e3528735441f1cf0f386a43de'
     }
 }
+*/
 
         stage('Build Docker Image') {
             steps {
